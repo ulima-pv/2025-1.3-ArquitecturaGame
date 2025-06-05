@@ -1,5 +1,4 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,13 +16,19 @@ public class InputManager : MonoBehaviour
     void OnEnable()
     {
         m_InputActions.Player.Move.performed += OnMovement;
+        m_InputActions.Player.Move.canceled += OnMovementStop;
+    }
+
+    private void OnMovementStop(InputAction.CallbackContext context)
+    {
+        EventBus.Raise<MovementEvent>(new MovementEvent(Vector2.zero));
     }
 
     private void OnMovement(
         InputAction.CallbackContext context)
     {
         Vector2 direction = context.ReadValue<Vector2>();
-        controller.Move(direction.normalized);
+        EventBus.Raise<MovementEvent>(new MovementEvent(direction));
     }
 
     void OnDisable()

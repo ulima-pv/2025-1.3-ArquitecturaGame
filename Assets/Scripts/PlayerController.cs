@@ -1,3 +1,4 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -6,9 +7,14 @@ public class PlayerController : MonoBehaviour
     public float Speed = 4f;
     private Vector2 m_Direction = Vector2.zero;
 
-    public void Move(Vector2 dir)
+    private void Start()
     {
-        m_Direction = dir;
+        EventBus.Subscribe<MovementEvent>(OnMovement);
+    }
+
+    private void OnMovement(MovementEvent evt)
+    {
+        m_Direction = evt.direction;
     }
 
     void Update()
