@@ -4,7 +4,6 @@ using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
-    public PlayerController controller;
     private InputSystem_Actions m_InputActions;
 
     void Awake()
@@ -17,6 +16,12 @@ public class InputManager : MonoBehaviour
     {
         m_InputActions.Player.Move.performed += OnMovement;
         m_InputActions.Player.Move.canceled += OnMovementStop;
+        m_InputActions.Player.QTEKey.performed += OnQTEKeyPressed;
+    }
+
+    private void OnQTEKeyPressed(InputAction.CallbackContext context)
+    {
+        EventBus.Raise(new QTEKeyEvent());
     }
 
     private void OnMovementStop(InputAction.CallbackContext context)
